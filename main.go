@@ -1,15 +1,23 @@
 package main
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"github.com/gofiber/fiber/v2"
+	"github.com/zakariawahyu/go-fiber-gorm-basic/database"
+	"github.com/zakariawahyu/go-fiber-gorm-basic/routes"
+)
 
 func main() {
-	app := fiber.New()
+	// Connection database
+	database.InitDB()
 
+	// Fiber init
+	app := fiber.New()
 	app.Get("/", func(ctx *fiber.Ctx) error {
 		return ctx.JSON(fiber.Map{
 			"message": "Hello World",
 		})
 	})
 
+	routes.RouteInit(app)
 	app.Listen(":8081")
 }
