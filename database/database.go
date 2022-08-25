@@ -2,9 +2,9 @@ package database
 
 import (
 	"fmt"
-	"github.com/zakariawahyu/go-fiber-gorm-basic/models"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 var DB *gorm.DB
@@ -38,15 +38,11 @@ func BuildConfig() string {
 
 func InitDB() {
 	var err error
-	DB, err = gorm.Open(mysql.Open(BuildConfig()), &gorm.Config{})
+	DB, err = gorm.Open(mysql.Open(BuildConfig()), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Info),
+	})
 
 	if err != nil {
 		panic("Cannot connect to database")
 	}
-
-	defer DB.AutoMigrate(
-		&models.User{},
-		&models.Locker{},
-		&models.Post{},
-	)
 }

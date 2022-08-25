@@ -8,9 +8,9 @@ import (
 )
 
 func PostGetAll(ctx *fiber.Ctx) error {
-	var post []models.Post
+	var post []models.PostResponseWithTag
 
-	database.DB.Preload("User").Find(&post)
+	database.DB.Preload("User").Preload("Tags").Find(&post)
 
 	return ctx.JSON(fiber.Map{
 		"post": post,
@@ -40,10 +40,30 @@ func CreatePost(ctx *fiber.Ctx) error {
 		})
 	}
 
+	if post.UserID == 0 {
+		return ctx.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"err": "user_id is required",
+		})
+	}
+
+	if len(post.TagsID) == 0 {
+		return ctx.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"err": "tags_id is required",
+		})
+	}
+
 	database.DB.Create(&post)
+	if len(post.TagsID) > 0 {
+		for _, tagID := range post.TagsID {
+			postTag := new(models.PostTag)
+			postTag.PostID = post.ID
+			postTag.TagID = tagID
+			database.DB.Create(&postTag)
+		}
+	}
+
 	return ctx.Status(http.StatusOK).JSON(fiber.Map{
 		"message": "create data succesfully",
 		"post":    post,
 	})
-
 }
