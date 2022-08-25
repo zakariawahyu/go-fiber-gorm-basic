@@ -47,5 +47,6 @@ func InitDB() {
 	defer DB.AutoMigrate(
 		&models.User{},
 		&models.Locker{},
+		&models.Post{},
 	)
 }

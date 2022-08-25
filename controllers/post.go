@@ -7,37 +7,43 @@ import (
 	"net/http"
 )
 
-func UserGetAll(ctx *fiber.Ctx) error {
-	var users []models.User
+func PostGetAll(ctx *fiber.Ctx) error {
+	var post []models.Post
 
-	database.DB.Preload("Locker").Preload("Post").Find(&users)
+	database.DB.Preload("User").Find(&post)
 
 	return ctx.JSON(fiber.Map{
-		"users": users,
+		"post": post,
 	})
 }
 
-func CreateUser(ctx *fiber.Ctx) error {
-	user := new(models.User)
+func CreatePost(ctx *fiber.Ctx) error {
+	post := new(models.Post)
 
 	// Parse Body Request to Object Struct
-	if err := ctx.BodyParser(user); err != nil {
+	if err := ctx.BodyParser(post); err != nil {
 		return ctx.Status(http.StatusServiceUnavailable).JSON(fiber.Map{
 			"err": "cant handle request",
 		})
 	}
 
 	// Manual Validation
-	if user.Name == "" {
+	if post.Title == "" {
 		return ctx.Status(http.StatusBadRequest).JSON(fiber.Map{
-			"err": "name is required",
+			"err": "title is required",
 		})
 	}
 
-	database.DB.Create(&user)
+	if post.Body == "" {
+		return ctx.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"err": "body is required",
+		})
+	}
+
+	database.DB.Create(&post)
 	return ctx.Status(http.StatusOK).JSON(fiber.Map{
 		"message": "create data succesfully",
-		"user":    user,
+		"post":    post,
 	})
 
 }
