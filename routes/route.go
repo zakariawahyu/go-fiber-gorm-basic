@@ -8,6 +8,12 @@ import (
 func RouteInit(app *fiber.App) {
 	app.Get("/users", controllers.UserGetAll)
 	app.Post("/users", controllers.CreateUser)
+	app.Get("/users/:id", controllers.GetUserByID)
+	app.Put("/users/:id", controllers.UpdateUser)
+	app.Delete("/users/:id", controllers.DeleteUser)
+
+	app.Get("/users-detail", controllers.GetUserDetailAll)
+	app.Get("/users-detail/:id", controllers.GetUserDetailByID)
 
 	app.Get("/lockers", controllers.LockerGetAll)
 	app.Post("/lockers", controllers.CreateLocker)
