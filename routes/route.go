@@ -17,6 +17,9 @@ func RouteInit(app *fiber.App) {
 
 	app.Get("/lockers", controllers.LockerGetAll)
 	app.Post("/lockers", controllers.CreateLocker)
+	app.Get("/lockers/:id", controllers.GetLockerByID)
+	app.Put("/lockers/:id", controllers.UpdateLocker)
+	app.Delete("/lockers/:id", controllers.DeleteLocker)
 
 	app.Get("/posts", controllers.PostGetAll)
 	app.Post("/posts", controllers.CreatePost)

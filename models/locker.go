@@ -10,7 +10,7 @@ type Locker struct {
 type LockerResponse struct {
 	ID     int    `json:"id" form:"id"`
 	Code   string `json:"code" form:"code"`
-	UserID int    `json:"-" form:"user_id"`
+	UserID int    `json:"user_id" form:"user_id"`
 }
 
 func (LockerResponse) TableName() string {
