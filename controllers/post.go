@@ -10,9 +10,13 @@ import (
 func PostGetAll(ctx *fiber.Ctx) error {
 	var post []models.PostResponseWithTag
 
-	database.DB.Preload("User").Preload("Tags").Find(&post)
+	if err := database.DB.Preload("User.Locker").Preload("Tags").Find(&post).Error; err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": err.Error(),
+		})
+	}
 
-	return ctx.JSON(fiber.Map{
+	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
 		"post": post,
 	})
 }
@@ -22,8 +26,8 @@ func CreatePost(ctx *fiber.Ctx) error {
 
 	// Parse Body Request to Object Struct
 	if err := ctx.BodyParser(post); err != nil {
-		return ctx.Status(http.StatusServiceUnavailable).JSON(fiber.Map{
-			"err": "cant handle request",
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": err.Error(),
 		})
 	}
 
@@ -65,5 +69,41 @@ func CreatePost(ctx *fiber.Ctx) error {
 	return ctx.Status(http.StatusOK).JSON(fiber.Map{
 		"message": "create data succesfully",
 		"post":    post,
+	})
+}
+
+func GetPostById(ctx *fiber.Ctx) error {
+	id := ctx.Params("id")
+	var post models.PostResponseWithTag
+
+	if err := database.DB.Where("id = ?", id).Preload("User.Locker").Preload("Tags").First(&post).Error; err != nil {
+		return ctx.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"message": err.Error(),
+		})
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
+		"post": post,
+	})
+}
+
+func UpdatePost(ctx *fiber.Ctx) error {
+	id := ctx.Params("id")
+	var post models.Post
+
+	if err := ctx.BodyParser(&post); err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": err.Error(),
+		})
+	}
+
+	if err := database.DB.Where("id = ?", id).Updates(&post).Error; err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": err.Error(),
+		})
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
+		"message": "post updated successfully",
 	})
 }

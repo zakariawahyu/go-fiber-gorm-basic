@@ -32,12 +32,12 @@ func (PostResponseWithoutUserID) TableName() string {
 }
 
 type PostResponseWithTag struct {
-	ID     int          `json:"id"`
-	Title  string       `form:"title" json:"title"`
-	Body   string       `form:"body" json:"body"`
-	UserID int          `json:"user_id"`
-	User   UserResponse `json:"user"`
-	Tags   []Tag        `gorm:"many2many:post_tags;foreignKey:ID;joinForeignKey:PostID;References:ID;joinReferences:TagID" json:"tags"`
+	ID     int    `json:"id"`
+	Title  string `form:"title" json:"title"`
+	Body   string `form:"body" json:"body"`
+	UserID int    `json:"user_id"`
+	User   User   `json:"user"`
+	Tags   []Tag  `gorm:"many2many:post_tags;foreignKey:ID;joinForeignKey:PostID;References:ID;joinReferences:TagID" json:"tags"`
 }
 
 func (PostResponseWithTag) TableName() string {

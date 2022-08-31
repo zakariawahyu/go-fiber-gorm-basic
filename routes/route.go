@@ -23,6 +23,8 @@ func RouteInit(app *fiber.App) {
 
 	app.Get("/posts", controllers.PostGetAll)
 	app.Post("/posts", controllers.CreatePost)
+	app.Get("/posts/:id", controllers.GetPostById)
+	app.Put("/posts/:id", controllers.UpdatePost)
 
 	app.Get("/tags", controllers.TagGetAll)
 	app.Post("/tags", controllers.CreateTag)
