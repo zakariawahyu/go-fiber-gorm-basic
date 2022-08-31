@@ -26,4 +26,10 @@ func RouteInit(app *fiber.App) {
 
 	app.Get("/tags", controllers.TagGetAll)
 	app.Post("/tags", controllers.CreateTag)
+	app.Get("/tags/:id", controllers.GetTagById)
+	app.Put("/tags/:id", controllers.UpdateTag)
+	app.Delete("/tags/:id", controllers.DeleteTag)
+
+	app.Get("/tags-detail", controllers.TagGetAllWithPost)
+	app.Get("/tags-detail/:id", controllers.GetTagByIdWithPost)
 }
