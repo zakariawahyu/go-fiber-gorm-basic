@@ -16,9 +16,7 @@ func LockerGetAll(ctx *fiber.Ctx) error {
 		})
 	}
 
-	return ctx.JSON(fiber.Map{
-		"lockers": locker,
-	})
+	return ctx.JSON(locker)
 }
 
 func CreateLocker(ctx *fiber.Ctx) error {
@@ -66,9 +64,7 @@ func GetLockerByID(ctx *fiber.Ctx) error {
 		})
 	}
 
-	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
-		"locker": locker,
-	})
+	return ctx.Status(fiber.StatusOK).JSON(locker)
 }
 
 func UpdateLocker(ctx *fiber.Ctx) error {

@@ -8,31 +8,27 @@ import (
 )
 
 func TagGetAll(ctx *fiber.Ctx) error {
-	var tag []models.Tag
+	var tags []models.Tag
 
-	if err := database.DB.Find(&tag).Error; err != nil {
+	if err := database.DB.Find(&tags).Error; err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"message": err.Error(),
 		})
 	}
 
-	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
-		"tags": tag,
-	})
+	return ctx.Status(fiber.StatusOK).JSON(tags)
 }
 
 func TagGetAllWithPost(ctx *fiber.Ctx) error {
-	var tag []models.TagResponseWithPost
+	var tags []models.TagResponseWithPost
 
-	if err := database.DB.Preload("Post").Find(&tag).Error; err != nil {
+	if err := database.DB.Preload("Post").Find(&tags).Error; err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"message": err.Error(),
 		})
 	}
 
-	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
-		"tags": tag,
-	})
+	return ctx.Status(fiber.StatusOK).JSON(tags)
 }
 
 func CreateTag(ctx *fiber.Ctx) error {
@@ -74,9 +70,7 @@ func GetTagById(ctx *fiber.Ctx) error {
 		})
 	}
 
-	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
-		"tag": tag,
-	})
+	return ctx.Status(fiber.StatusOK).JSON(tag)
 }
 
 func GetTagByIdWithPost(ctx *fiber.Ctx) error {
@@ -89,9 +83,7 @@ func GetTagByIdWithPost(ctx *fiber.Ctx) error {
 		})
 	}
 
-	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
-		"tag": tag,
-	})
+	return ctx.Status(fiber.StatusOK).JSON(tag)
 }
 
 func UpdateTag(ctx *fiber.Ctx) error {
