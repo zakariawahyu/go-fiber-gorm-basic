@@ -15,3 +15,13 @@ type UserResponse struct {
 func (UserResponse) TableName() string {
 	return "users"
 }
+
+type UserWithoutPost struct {
+	ID     int            `json:"id"`
+	Name   string         `json:"name"`
+	Locker LockerResponse `gorm:"foreignKey:ID;joinForeignKey:UserID" json:"locker"`
+}
+
+func (UserWithoutPost) TableName() string {
+	return "users"
+}

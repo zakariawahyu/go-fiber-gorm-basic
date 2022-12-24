@@ -16,23 +16,19 @@ func UserGetAll(ctx *fiber.Ctx) error {
 		})
 	}
 
-	return ctx.JSON(fiber.Map{
-		"users": users,
-	})
+	return ctx.JSON(users)
 }
 
 func GetUserDetailAll(ctx *fiber.Ctx) error {
 	var users []models.User
 
-	if err := database.DB.Preload("Locker").Preload("Post").Find(&users).Error; err != nil {
+	if err := database.DB.Preload("Locker").Preload("Post.Tags").Find(&users).Error; err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"message": err.Error(),
 		})
 	}
 
-	return ctx.JSON(fiber.Map{
-		"users": users,
-	})
+	return ctx.JSON(users)
 }
 
 func CreateUser(ctx *fiber.Ctx) error {
@@ -69,24 +65,20 @@ func GetUserByID(ctx *fiber.Ctx) error {
 		})
 	}
 
-	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
-		"user": user,
-	})
+	return ctx.Status(fiber.StatusOK).JSON(user)
 }
 
 func GetUserDetailByID(ctx *fiber.Ctx) error {
 	id := ctx.Params("id")
 	var user models.User
 
-	if err := database.DB.Where("id = ? ", id).Preload("Post").Preload("Locker").First(&user).Error; err != nil {
+	if err := database.DB.Where("id = ? ", id).Preload("Post.Tags").Preload("Locker").First(&user).Error; err != nil {
 		return ctx.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"message": err.Error(),
 		})
 	}
 
-	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
-		"user": user,
-	})
+	return ctx.Status(fiber.StatusOK).JSON(user)
 }
 
 func UpdateUser(ctx *fiber.Ctx) error {
