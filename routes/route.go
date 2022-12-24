@@ -12,8 +12,8 @@ func RouteInit(app *fiber.App) {
 	app.Put("/users/:id", controllers.UpdateUser)
 	app.Delete("/users/:id", controllers.DeleteUser)
 
-	app.Get("/users-detail", controllers.GetUserDetailAll)
-	app.Get("/users-detail/:id", controllers.GetUserDetailByID)
+	app.Get("/users-details", controllers.GetUserDetailAll)
+	app.Get("/users-details/:id", controllers.GetUserDetailByID)
 
 	app.Get("/lockers", controllers.LockerGetAll)
 	app.Post("/lockers", controllers.CreateLocker)
@@ -32,6 +32,6 @@ func RouteInit(app *fiber.App) {
 	app.Put("/tags/:id", controllers.UpdateTag)
 	app.Delete("/tags/:id", controllers.DeleteTag)
 
-	app.Get("/tags-detail", controllers.TagGetAllWithPost)
-	app.Get("/tags-detail/:id", controllers.GetTagByIdWithPost)
+	app.Get("/tags-details", controllers.TagGetAllWithPost)
+	app.Get("/tags-details/:id", controllers.GetTagByIdWithPost)
 }

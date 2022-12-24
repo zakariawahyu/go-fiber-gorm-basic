@@ -8,17 +8,15 @@ import (
 )
 
 func PostGetAll(ctx *fiber.Ctx) error {
-	var post []models.PostResponseWithTag
+	var posts []models.PostResponseWithTag
 
-	if err := database.DB.Preload("User.Locker").Preload("Tags").Find(&post).Error; err != nil {
+	if err := database.DB.Preload("User.Locker").Preload("Tags").Find(&posts).Error; err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"message": err.Error(),
 		})
 	}
 
-	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
-		"post": post,
-	})
+	return ctx.Status(fiber.StatusOK).JSON(posts)
 }
 
 func CreatePost(ctx *fiber.Ctx) error {
@@ -67,7 +65,7 @@ func CreatePost(ctx *fiber.Ctx) error {
 	}
 
 	return ctx.Status(http.StatusOK).JSON(fiber.Map{
-		"message": "create data succesfully",
+		"message": "create data successfully",
 		"post":    post,
 	})
 }
@@ -82,9 +80,7 @@ func GetPostById(ctx *fiber.Ctx) error {
 		})
 	}
 
-	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
-		"post": post,
-	})
+	return ctx.Status(fiber.StatusOK).JSON(post)
 }
 
 func UpdatePost(ctx *fiber.Ctx) error {
